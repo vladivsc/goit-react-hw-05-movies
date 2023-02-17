@@ -1,21 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { fetchCastMovies } from 'components/api/api';
+import { fetchCastMovies } from 'components/api/themoviedb';
 
+import Loader from 'components/Loader/Loader';
 import styles from '../Cast/cast.module.scss';
 
 const Cast = () => {
   const [cast, setCast] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchCast = async () => {
+      setLoading(true);
+
       try {
         const { data } = await fetchCastMovies(id);
         setCast(data.cast);
       } catch ({ response }) {
         console.log(response.data.massage);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCast(id);
@@ -41,6 +47,7 @@ const Cast = () => {
 
   return (
     <div className={styles.castContainer}>
+      {loading && <Loader />}
       <ul className={styles.castList}>{castList}</ul>
     </div>
   );

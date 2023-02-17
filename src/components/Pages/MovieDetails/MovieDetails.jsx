@@ -1,22 +1,36 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link, Outlet } from 'react-router-dom';
+import {
+  useParams,
+  useNavigate,
+  Link,
+  Outlet,
+  useLocation,
+} from 'react-router-dom';
 
-import { fetchMovieById } from 'components/api/api';
+import { fetchMovieById } from 'components/api/themoviedb';
 
+import Loader from 'components/Loader/Loader';
 import styles from '../MovieDetails/movieDetails.module.scss';
 
 const MovieDetails = () => {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/';
 
   useEffect(() => {
     const fetchMovie = async () => {
+      setLoading(true);
+
       try {
         const { data } = await fetchMovieById(id);
         setMovies(data);
       } catch ({ response }) {
         console.log(response.data.massage);
+      } finally {
+        setLoading(false);
       }
     };
     fetchMovie();
@@ -34,12 +48,20 @@ const MovieDetails = () => {
 
   return (
     <>
-      <button className={styles.btn} onClick={() => navigate(-1)}>
+      <button className={styles.btn} onClick={() => navigate(from)}>
         Go back
       </button>
+      {loading && <Loader />}
       <div className={styles.details}>
         <div className={styles.poster}>
-          <img src={`http://image.tmdb.org/t/p/w500/${poster_path}`} alt="" />
+          <img
+            src={
+              poster_path === null
+                ? 'https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png'
+                : `https://image.tmdb.org/t/p/w500${poster_path}`
+            }
+            alt=""
+          />
         </div>
         <div>
           <h2 className={styles.title}>{title}</h2>
@@ -52,10 +74,10 @@ const MovieDetails = () => {
       </div>
       <div className={styles.info}>
         <h3>Additional information</h3>
-        <Link to={`cast`} className={styles.link}>
+        <Link state={{ from }} to={`cast`} className={styles.link}>
           Cast
         </Link>
-        <Link to={`reviews`} className={styles.link}>
+        <Link state={{ from }} to={`reviews`} className={styles.link}>
           Reviews
         </Link>
         <Outlet />

@@ -1,21 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { fetchReviewsMovie } from 'components/api/api';
+import { fetchReviewsMovie } from 'components/api/themoviedb';
 
+import Loader from 'components/Loader/Loader';
 import styles from '../Reviews/reviews.module.scss';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchReviews = async () => {
+      setLoading(true);
+
       try {
         const { data } = await fetchReviewsMovie(id);
         setReviews(data.results);
       } catch ({ response }) {
         console.log(response.data.massage);
+      } finally {
+        setLoading(false);
       }
     };
     fetchReviews(id);
@@ -32,6 +38,7 @@ const Reviews = () => {
 
   return (
     <div>
+      {loading && <Loader />}
       <ul>{reviewList}</ul>
     </div>
   );
