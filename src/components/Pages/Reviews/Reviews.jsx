@@ -27,7 +27,7 @@ const Reviews = () => {
     fetchReviews(id);
   }, [id]);
 
-  const reviewList = reviews.map(({ id, author, content }) => {
+  const reviewList = reviews?.map(({ id, author, content }) => {
     return (
       <li key={id}>
         <p className={styles.author}>Author: {author}</p>
