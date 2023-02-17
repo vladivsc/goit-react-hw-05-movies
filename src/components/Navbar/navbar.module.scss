@@ -1,0 +1,31 @@
+.menu {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0px 20px 17px -16px rgba(66, 68, 90, 1);
+}
+
+.menuList {
+  display: flex;
+  list-style: none;
+}
+
+.item {
+  margin-right: 15px;
+}
+
+.link {
+  font-size: 20px;
+  text-decoration: none;
+  color: black;
+
+  transition-delay: 150ms;
+
+  &:hover {
+    color: aqua;
+  }
+
+  &:global(.active) {
+    color: crimson;
+    font-weight: bold;
+  }
+}
