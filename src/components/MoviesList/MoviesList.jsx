@@ -5,14 +5,14 @@ import styles from '../MoviesList/moviesList.module.scss';
 
 const MoviesList = ({ results }) => {
   const location = useLocation();
-  const elements = results.map(({ id, title }) => (
+  const elements = results?.map(({ id, title, name }) => (
     <li key={id} className={styles.item}>
       <Link
         className={styles.link}
         to={`/movies/${id}`}
         state={{ from: location }}
       >
-        <p>{title}</p>
+        {title || name}
       </Link>
     </li>
   ));
@@ -30,7 +30,8 @@ MoviesList.propTypes = {
   results: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      name: PropTypes.string,
     })
   ),
 };

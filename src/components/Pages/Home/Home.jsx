@@ -30,7 +30,7 @@ const Home = () => {
     <>
       {loading && <Loader />}
       <h1 className={styles.title}>Trending movies</h1>
-      <MoviesList results={items} />
+      {items.length > 0 && <MoviesList results={items} />}
     </>
   );
 };

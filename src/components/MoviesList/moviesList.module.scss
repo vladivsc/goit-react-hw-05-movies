@@ -4,12 +4,12 @@
 
 .item {
   list-style: none;
+  margin-bottom: 10px;
 }
 
 .link {
   text-decoration: none;
   color: black;
-
   &:hover {
     color: grey;
   }
